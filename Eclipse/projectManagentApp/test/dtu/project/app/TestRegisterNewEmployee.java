@@ -24,7 +24,7 @@ public class TestRegisterNewEmployee {
 	 * </ol>
 	 */
 	@Test
-	public void testLogin() {
+	public void testRegister() {
 
 		projectApp projectApp = new projectApp();
 		
@@ -34,11 +34,50 @@ public class TestRegisterNewEmployee {
 		
 		// Step 1)
 		
-		boolean login = projectApp.EmployeeLogin("abcd");
+		boolean registered = projectApp.employeeRegister("abcd");
 		
-		// Step 2) Check that the method returned true and check that user is logged in as the new employee.
-		assertTrue(login);
+		// Step 2) Check that the method returned true and check that the user is logged in as the new employee.
+		assertTrue(registered);
 		assertTrue(projectApp.employeeLoggedIn());
+	}
+	
+	/** 
+	 * Tests the scenario when an unregistered user tries to create a new employee account with wrong initials.
+	 * <ol>
+	 *  <li> The user provides initials that does or does not comply with the rules
+	 * 	<li> The project application check if the initials comply to the rules
+	 *  <li> The project application knows that the user entered right or wrong initials and notifies the user of the fact
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterWithWrongInitials() {
+
+		projectApp projectApp = new projectApp();
+		
+		// Check first that the user is not logged in as an employee.
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		// Step 1) Try to register with different initials
+		
+		boolean registered_try1 = projectApp.employeeRegister(""); //Should not pass
+		boolean registered_try2 = projectApp.employeeRegister(" "); //Should not pass
+		boolean registered_try3 = projectApp.employeeRegister("a"); //Should pass
+		boolean registered_try4 = projectApp.employeeRegister("a  b"); //Should not pass
+		boolean registered_try5 = projectApp.employeeRegister("acde"); //Should pass
+		boolean registered_try6 = projectApp.employeeRegister("12"); //Should not pass
+		boolean registered_try7 = projectApp.employeeRegister("1234"); //Should not pass
+		boolean registered_try8 = projectApp.employeeRegister("abcde"); //Should not pass
+		
+		// Step 2) Check that the method returns false or true depending on the rules.
+		assertFalse(registered_try1);
+		assertFalse(registered_try2);
+		assertTrue(registered_try3);
+		assertFalse(registered_try4);
+		assertTrue(registered_try5);
+		assertFalse(registered_try6);
+		assertFalse(registered_try7);
+		assertFalse(registered_try8);
 	}
 
 }
