@@ -34,7 +34,7 @@ public class TestRegisterNewEmployee {
 		
 		// Step 1)
 		
-		boolean login = projectApp.EmployeeLogin("abcd");
+		boolean login = projectApp.EmployeeLogin("abcD");
 		
 		// Step 2) Check that the method returned true and check that user is logged in as the new employee.
 		assertTrue(login);
