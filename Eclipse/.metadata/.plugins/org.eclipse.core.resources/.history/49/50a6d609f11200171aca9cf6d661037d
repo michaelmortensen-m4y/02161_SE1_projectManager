@@ -26,19 +26,19 @@ public class TestRegisterNewEmployee {
 	@Test
 	public void testLogin() {
 
-		projectApp projectApp = new projectApp();
+		projectApp libApp = new projectApp();
 		
 		// Check first that the user is not logged in as an employee.
 		
-		assertFalse(projectApp.employeeLoggedIn());
+		assertFalse(libApp.employeeLoggedIn());
 		
 		// Step 1)
 		
-		boolean login = projectApp.EmployeeLogin("abcd");
+		boolean login = libApp.EmployeeLogin("abcd");
 		
 		// Step 2) Check that the method returned true and check that user is logged in as the new employee.
 		assertTrue(login);
-		assertTrue(projectApp.employeeLoggedIn());
+		assertTrue(libApp.employeeLoggedIn());
 	}
 
 }

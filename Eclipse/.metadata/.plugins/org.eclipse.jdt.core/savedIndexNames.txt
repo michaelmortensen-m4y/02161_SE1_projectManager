@@ -16,7 +16,6 @@ INDEX VERSION 1.130+D:\Documents\GitHub\02161_SE1_projectManager\Eclipse\.metada
 91472061.index
 3314433690.index
 2997567257.index
-1660340012.index
 2221491804.index
 843494433.index
 3643810303.index
