@@ -21,7 +21,7 @@ public class ProjectApp {
 	}
 	
 	void registerNewEmployee(String initials) {
-		// register a new employee and call login for that employee
+		//
 	}
 	
 	void login(Employee employee) {
