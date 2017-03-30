@@ -1,0 +1,23 @@
+package dtu.project.app;
+
+public class Employee {
+	
+	public static final int DEFAUL_ACTIVITY_LIMIT = 10;
+	
+	private String initial;
+	public int activityLimit;
+	
+	public Employee(String init) {
+		initial = init;
+		activityLimit = DEFAUL_ACTIVITY_LIMIT;
+	}
+	
+	public String getInitial() {
+		return initial;
+	}
+	
+	public String getActivityLimit() {
+		return activityLimit;
+	}
+
+}

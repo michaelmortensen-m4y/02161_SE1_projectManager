@@ -1,5 +1,7 @@
 package dtu.project.app;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,9 @@ public class SampleDataSetup {
 	 * should inherit from this class and add sample data as necessary.
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		
+		// Register 8 employees in the system
 		projectApp.registerNewEmployee("abcd");	
 		projectApp.logout();
 		projectApp.registerNewEmployee("efgh");
@@ -42,6 +46,7 @@ public class SampleDataSetup {
 		projectApp.logout();
 		projectApp.registerNewEmployee("ooaa");
 		projectApp.logout();
+		
 	}
 
 

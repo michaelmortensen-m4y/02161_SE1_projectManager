@@ -7,11 +7,13 @@ import java.util.GregorianCalendar;
 
 public class ProjectApp {
 	
+	public static final int INITIALS_MAX_LENGTH = 4;
+	public static final int INITIALS_MIN_LENGTH = 1;
+	
 	private int serialNumberCounter;
 	public List<Employee> employees = new ArrayList<Employee>(); // Employees registered in the application
 	public Employee activeUser;
 	public DateServer ds = new DateServer();
-	boolean logi = false;
 
 	public Calendar getDate() {
 		return ds.getDate();
@@ -22,37 +24,53 @@ public class ProjectApp {
 	}
 	
 	void registerNewEmployee(String initials) {
-		// register a new employee and call login for that employee
-		activeUser = new Employee(initials);
-		employees.add(activeUser);
-		login();
+		// Check initials and register a new employee and call login for that employee
+		if (initialsAccepted(initials)) {
+			Employee newEmployee = new Employee(initials);
+			employees.add(newEmployee);
+			login(newEmployee);
+		}
 	}
 	
-	void login() {
-		logi = true;
-		// set active user as the employee
+	public boolean initialsAccepted(String initials) {
+		// return true if user is not logged in and initials comply with the rules and are not already in the system
+		return (!employeeLoggedIn() && 
+				initials.matches("[a-zA-Z]+") && 
+				initials.length() >= INITIALS_MIN_LENGTH && 
+				initials.length() <= INITIALS_MAX_LENGTH) &&
+				getEmployeeByInitials(initials) == null;
+	}
+	
+	void login(Employee employee) {
+		if (!employeeLoggedIn()) {
+			activeUser = employee; // set active user as the employee
+		}
 	}
 	
 	void logout() {
-		logi = false;
-		// set active user as unregistered
+		if (employeeLoggedIn()) {
+			activeUser = null; // set active user as unregistered
+		}
 	}
 
 	public List<Employee> getEmployees() {
-		// TODO Auto-generated method stub
 		return employees;
 	}
 
 	public boolean employeeLoggedIn() {
-		// TODO Auto-generated method stub
-		if (logi) {
+		if (activeUser != null) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean employeeRegister(String string) {
-		// TODO Auto-generated method stub
-		return false;
+	public Employee getEmployeeByInitials(String initials) {
+		for (Employee employee : employees) {
+			if (employee.getInitials().equals(initials)) {
+				return employee;
+			}
+		}
+		return null;
 	}
+	
 }

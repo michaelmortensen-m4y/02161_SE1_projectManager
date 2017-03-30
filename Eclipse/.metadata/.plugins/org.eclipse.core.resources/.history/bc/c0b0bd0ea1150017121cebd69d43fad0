@@ -1,0 +1,65 @@
+package dtu.project.app;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class ProjectApp {
+	
+	public static final int INITIALS_MAX_LENGTH = 4;
+	public static final int INITIALS_MIN_LENGTH = 1;
+	
+	private int serialNumberCounter;
+	public List<Employee> employees = new ArrayList<Employee>(); // Employees registered in the application
+	public Employee activeUser;
+	public DateServer ds = new DateServer();
+
+	public Calendar getDate() {
+		return ds.getDate();
+	}
+
+	public void setDateServer(DateServer dateServer) {
+		this.ds = dateServer;
+	}
+	
+	void registerNewEmployee(String initials) {
+		// Check initials and register a new employee and call login for that employee
+		if (initialsAccepted(initials)) {
+			Employee newEmployee = new Employee(initials);
+			employees.add(newEmployee);
+			login(newEmployee);
+		}
+	}
+	
+	public boolean initialsAccepted(String initials) {
+		return (!employeeLoggedIn() && 
+				initials.matches("[a-zA-Z]+") && 
+				initials.length() >= INITIALS_MIN_LENGTH && 
+				initials.length() <= INITIALS_MAX_LENGTH);
+	}
+	
+	void login(Employee employee) {
+		if (!employeeLoggedIn()) {
+			activeUser = employee; // set active user as the employee
+		}
+	}
+	
+	void logout() {
+		if (employeeLoggedIn()) {
+			activeUser = null; // set active user as unregistered
+		}
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public boolean employeeLoggedIn() {
+		if (activeUser != null) {
+			return true;
+		}
+		return false;
+	}
+	
+}

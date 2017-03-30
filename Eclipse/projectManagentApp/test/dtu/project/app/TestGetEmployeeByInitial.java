@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -25,8 +27,12 @@ public class TestGetEmployeeByInitial extends SampleDataSetup {
 	@Test
 	public void testSearchEmployeeByInitial() {
 		
-		List<Employee> employees = projectApp.getEmployeeByInitial("abcd");
-		assertEquals(1,employees.size());
+		List<Employee> employeesResults = new ArrayList<Employee>();
+		assertEquals(0, employeesResults.size());
+		
+		employeesResults.add(projectApp.getEmployeeByInitials("abcd"));
+		assertEquals(1, employeesResults.size());
+		
 	}
 	
 	/** 
@@ -39,8 +45,49 @@ public class TestGetEmployeeByInitial extends SampleDataSetup {
 	@Test
 	public void testSearchEmployeeByInitialNoResults() {
 		
-		List<Employee> employees = projectApp.getEmployeeByInitial("aaaa");
-		assertEquals(0,employees.size());
+		assertEquals(null, projectApp.getEmployeeByInitials("xxxx"));
+		
+	}
+	
+	/** 
+	 * Tests registering multiple employees with the same initials.
+	 * <ol>
+	 *  <li> The user registers a new employee
+	 * 	<li> The user logs out
+	 * 	<li> The user registers another employee with the same initial
+	 *  <li> The application knows that there can not exist multiple employees with the same initials
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterAnAllreadyExistingEmployee() {
+
+		ProjectApp projectApp = new ProjectApp();
+		
+		List<Employee> employees = projectApp.getEmployees();
+		assertEquals(0, employees.size());
+		
+		// Check first that the user is not logged in as an employee.
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		// Step 1) Register an employee
+		
+		projectApp.registerNewEmployee("abcd");
+		
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		employees = projectApp.getEmployees();
+		assertEquals(1, employees.size());
+		
+		// Step 2) Logout and try to register another employee with the same initials
+		
+		projectApp.logout();
+		
+		projectApp.registerNewEmployee("abcd");
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		assertEquals(1, employees.size());
 	}
 
 }

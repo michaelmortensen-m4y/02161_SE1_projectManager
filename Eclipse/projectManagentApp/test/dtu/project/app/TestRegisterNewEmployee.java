@@ -64,25 +64,100 @@ public class TestRegisterNewEmployee {
 		
 		// Step 1) Try to register with different initials
 		
-		boolean registered_try1 = projectApp.employeeRegister("");		 //Should not pass
-		boolean registered_try2 = projectApp.employeeRegister(" "); 	 //Should not pass
-		boolean registered_try3 = projectApp.employeeRegister("a.b."); 	 //Should not pass
-		boolean registered_try4 = projectApp.employeeRegister("a  b"); 	 //Should not pass
-		boolean registered_try5 = projectApp.employeeRegister("a12b"); 	 //Should not pass
-		boolean registered_try6 = projectApp.employeeRegister("12"); 	 //Should not pass
-		boolean registered_try7 = projectApp.employeeRegister("1234"); 	 //Should not pass
-		boolean registered_try8 = projectApp.employeeRegister("abcde");  //Should not pass
-		
-		// Step 2) Check that the method returns false or true depending on the rules.
-		assertFalse(registered_try1||registered_try2
-					||registered_try3||registered_try4
-					||registered_try5||registered_try6
-					||registered_try7||registered_try8);
+		projectApp.registerNewEmployee("");		 //Should not pass
+		projectApp.registerNewEmployee(" "); 	 //Should not pass
+		projectApp.registerNewEmployee("ab-c");  //Should not pass
+		projectApp.registerNewEmployee("ab+c");	 //Should not pass
+		projectApp.registerNewEmployee("a.b.");	 //Should not pass
+		projectApp.registerNewEmployee("a  b");  //Should not pass
+		projectApp.registerNewEmployee("a12b");  //Should not pass
+		projectApp.registerNewEmployee("1ab2");  //Should not pass
+		projectApp.registerNewEmployee("12"); 	 //Should not pass
+		projectApp.registerNewEmployee("1234");  //Should not pass
+		projectApp.registerNewEmployee("abcde"); //Should not pass
 		
 		assertFalse(projectApp.employeeLoggedIn());
 		
 		employees = projectApp.getEmployees();
 		assertEquals(0, employees.size());
+	}
+
+	/** 
+	 * Tests registering a new employee while allready logged in.
+	 * <ol>
+	 *  <li> The user registers a new employee
+	 * 	<li> The user registers another employee
+	 *  <li> The project application knows that the user can not register an employee while logged in as one
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterMultipleEmployees() {
+
+		ProjectApp projectApp = new ProjectApp();
+		
+		List<Employee> employees = projectApp.getEmployees();
+		assertEquals(0, employees.size());
+		
+		// Check first that the user is not logged in as an employee.
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		// Step 1) Register an employee
+		
+		projectApp.registerNewEmployee("abcd");
+		
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		employees = projectApp.getEmployees();
+		assertEquals(1, employees.size());
+		
+		// Step 2) Try to register another employee
+		
+		projectApp.registerNewEmployee("efgh");
+		
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		assertEquals(1, employees.size());
+	}
+	
+	/** 
+	 * Tests registering multiple employees successfully.
+	 * <ol>
+	 *  <li> The user registers a new employee
+	 * 	<li> The user logs out
+	 * 	<li> The user registers another employee
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterMultipleEmployeesSuccesfully() {
+
+		ProjectApp projectApp = new ProjectApp();
+		
+		List<Employee> employees = projectApp.getEmployees();
+		assertEquals(0, employees.size());
+		
+		// Check first that the user is not logged in as an employee.
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		// Step 1) Register an employee
+		
+		projectApp.registerNewEmployee("abcd");
+		
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		employees = projectApp.getEmployees();
+		assertEquals(1, employees.size());
+		
+		// Step 2) Logout and register another employee
+		
+		projectApp.logout();
+		
+		projectApp.registerNewEmployee("efgh");
+		
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		assertEquals(2, employees.size());
 	}
 
 }

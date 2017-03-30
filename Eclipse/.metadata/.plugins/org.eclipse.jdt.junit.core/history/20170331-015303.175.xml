@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="TestGetEmployeeByInitial" project="projectManagentApp" tests="3" started="3" failures="0" errors="0" ignored="0">
+  <testsuite name="dtu.project.app.TestGetEmployeeByInitial" time="0.0">
+    <testcase name="testRegisterAnAllreadyExistingEmployee" classname="dtu.project.app.TestGetEmployeeByInitial" time="0.0"/>
+    <testcase name="testSearchEmployeeByInitialNoResults" classname="dtu.project.app.TestGetEmployeeByInitial" time="0.0"/>
+    <testcase name="testSearchEmployeeByInitial" classname="dtu.project.app.TestGetEmployeeByInitial" time="0.0"/>
+  </testsuite>
+</testrun>
