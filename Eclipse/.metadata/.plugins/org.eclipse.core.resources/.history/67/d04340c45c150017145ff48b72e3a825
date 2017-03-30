@@ -26,16 +26,16 @@ public class TestRegisterNewEmployee {
 	@Test
 	public void testRegisterEmployee() {
 
-		ProjectApp projectApp = new ProjectApp();
+		projectApp projectApp = new projectApp();
 		
 		List<Employee> employees = projectApp.getEmployees();
 		assertEquals(0, employees.size());
 		
 		assertFalse(projectApp.employeeLoggedIn());
 		
-		projectApp.registerNewEmployee("abcd");
+		boolean registered = projectApp.registerNewEmployee("abcd");
 
-		
+		assertTrue(registered);
 		assertTrue(projectApp.employeeLoggedIn());
 		
 		employees = projectApp.getEmployees();
@@ -53,7 +53,7 @@ public class TestRegisterNewEmployee {
 	@Test
 	public void testRegisterWithWrongInitials() {
 
-		ProjectApp projectApp = new ProjectApp();
+		projectApp projectApp = new projectApp();
 		
 		List<Employee> employees = projectApp.getEmployees();
 		assertEquals(0, employees.size());
@@ -64,14 +64,14 @@ public class TestRegisterNewEmployee {
 		
 		// Step 1) Try to register with different initials
 		
-		boolean registered_try1 = projectApp.employeeRegister("");		 //Should not pass
-		boolean registered_try2 = projectApp.employeeRegister(" "); 	 //Should not pass
-		boolean registered_try3 = projectApp.employeeRegister("a.b."); 	 //Should not pass
-		boolean registered_try4 = projectApp.employeeRegister("a  b"); 	 //Should not pass
-		boolean registered_try5 = projectApp.employeeRegister("a12b"); 	 //Should not pass
-		boolean registered_try6 = projectApp.employeeRegister("12"); 	 //Should not pass
-		boolean registered_try7 = projectApp.employeeRegister("1234"); 	 //Should not pass
-		boolean registered_try8 = projectApp.employeeRegister("abcde");  //Should not pass
+		boolean registered_try1 = projectApp.registerNewEmployee("");		 //Should not pass
+		boolean registered_try2 = projectApp.registerNewEmployee(" "); 	 //Should not pass
+		boolean registered_try3 = projectApp.registerNewEmployee("a.b."); 	 //Should not pass
+		boolean registered_try4 = projectApp.registerNewEmployee("a  b"); 	 //Should not pass
+		boolean registered_try5 = projectApp.registerNewEmployee("a12b"); 	 //Should not pass
+		boolean registered_try6 = projectApp.registerNewEmployee("12"); 	 //Should not pass
+		boolean registered_try7 = projectApp.registerNewEmployee("1234"); 	 //Should not pass
+		boolean registered_try8 = projectApp.registerNewEmployee("abcde");  //Should not pass
 		
 		// Step 2) Check that the method returns false or true depending on the rules.
 		assertFalse(registered_try1||registered_try2
