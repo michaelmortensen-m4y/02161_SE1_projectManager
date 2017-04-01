@@ -35,8 +35,10 @@ public class TestRegisterNewEmployee {
 		
 		projectApp.registerNewEmployee("abcd");
 
+		
 		assertTrue(projectApp.employeeLoggedIn());
 		
+		//employees = projectApp.getEmployees();
 		assertEquals(1, employees.size());
 	}
 	
@@ -76,6 +78,7 @@ public class TestRegisterNewEmployee {
 		
 		assertFalse(projectApp.employeeLoggedIn());
 		
+		employees = projectApp.getEmployees();
 		assertEquals(0, employees.size());
 	}
 
@@ -105,6 +108,7 @@ public class TestRegisterNewEmployee {
 		
 		assertTrue(projectApp.employeeLoggedIn());
 		
+		employees = projectApp.getEmployees();
 		assertEquals(1, employees.size());
 		
 		// Step 2) Try to register another employee
@@ -142,6 +146,7 @@ public class TestRegisterNewEmployee {
 		
 		assertTrue(projectApp.employeeLoggedIn());
 		
+		employees = projectApp.getEmployees();
 		assertEquals(1, employees.size());
 		
 		// Step 2) Logout and register another employee

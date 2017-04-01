@@ -10,34 +10,32 @@ import java.util.List;
 import org.junit.Test;
 
 /**
- * This class contains tests, testing the functionality of adding new employees to the system.
+ * This class contains tests, testing the functionality of adding projects to the system.
  * @author group 9
  *
  */
-public class TestRegisterNewEmployee {
+public class TestCreateNewProject extends SampleDataSetup {
 	/** 
-	 * Tests the scenario when an unregistered user successfully creates a new employee account.
+	 * Tests the scenario when an employee successfully creates a new project and is automatically set as project manager.
 	 * <ol>
-	 *  <li> The user provides initials
-	 * 	<li> The project application check if the initials comply to the rules
-	 *  <li> The project application knows that the user is logged in as the new employee 
+	 *  <li> The employee is logged in
+	 * 	<li> The employee provides a name for the project
+	 *  <li> The project application creates a new project with that name and generates a unique serial number
 	 * </ol>
 	 */
 	@Test
-	public void testRegisterEmployee() {
+	public void testCreateProject() {
 
 		ProjectApp projectApp = new ProjectApp();
 		
-		List<Employee> employees = projectApp.getEmployees();
-		assertEquals(0, employees.size());
+		List<Employee> projects = projectApp.getProjects();
+		assertEquals(0, projects.size());
 		
-		assertFalse(projectApp.employeeLoggedIn());
-		
-		projectApp.registerNewEmployee("abcd");
-
 		assertTrue(projectApp.employeeLoggedIn());
 		
-		assertEquals(1, employees.size());
+		projectApp.createNewProject("project 1");
+		
+		assertEquals(0, projects.size());
 	}
 	
 	/** 
@@ -76,6 +74,7 @@ public class TestRegisterNewEmployee {
 		
 		assertFalse(projectApp.employeeLoggedIn());
 		
+		employees = projectApp.getEmployees();
 		assertEquals(0, employees.size());
 	}
 
@@ -105,6 +104,7 @@ public class TestRegisterNewEmployee {
 		
 		assertTrue(projectApp.employeeLoggedIn());
 		
+		employees = projectApp.getEmployees();
 		assertEquals(1, employees.size());
 		
 		// Step 2) Try to register another employee
@@ -142,6 +142,7 @@ public class TestRegisterNewEmployee {
 		
 		assertTrue(projectApp.employeeLoggedIn());
 		
+		employees = projectApp.getEmployees();
 		assertEquals(1, employees.size());
 		
 		// Step 2) Logout and register another employee

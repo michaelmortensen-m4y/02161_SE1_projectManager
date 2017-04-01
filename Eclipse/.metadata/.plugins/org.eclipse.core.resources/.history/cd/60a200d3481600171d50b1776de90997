@@ -57,6 +57,10 @@ public class ProjectApp {
 	public List<Employee> getEmployees() {
 		return employees;
 	}
+	
+	public List<Project> getProjects() {
+		return projects;
+	}
 
 	public boolean employeeLoggedIn() {
 		if (activeUser != null) {
@@ -72,26 +76,6 @@ public class ProjectApp {
 			}
 		}
 		return null;
-	}
-	
-	public List<Project> getProjects() {
-		return projects;
-	}
-	
-	void createNewProject(String name) {
-		if (employeeLoggedIn()) {
-			Project newProject = new Project(name, generateId(), activeUser);
-			projects.add(newProject);
-		}
-	}
-	
-	private int generateId() {
-		serialNumberCounter++;
-		return serialNumberCounter;
-	}
-
-	void setProjectManager(Project project, Employee employee) {
-		project.setProjectManager(employee);
 	}
 	
 }

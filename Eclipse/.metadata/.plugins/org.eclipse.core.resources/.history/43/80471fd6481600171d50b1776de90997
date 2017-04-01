@@ -80,18 +80,13 @@ public class ProjectApp {
 	
 	void createNewProject(String name) {
 		if (employeeLoggedIn()) {
-			Project newProject = new Project(name, generateId(), activeUser);
+			Project newProject = new Project(name, activeUser);
 			projects.add(newProject);
 		}
 	}
 	
-	private int generateId() {
-		serialNumberCounter++;
-		return serialNumberCounter;
-	}
-
 	void setProjectManager(Project project, Employee employee) {
-		project.setProjectManager(employee);
+		project.setProjectManager(Employee employee);
 	}
 	
 }

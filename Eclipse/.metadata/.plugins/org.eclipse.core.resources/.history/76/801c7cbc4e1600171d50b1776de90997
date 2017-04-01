@@ -1,0 +1,44 @@
+package dtu.project.app;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class Activity {
+	
+	private String name;
+	public int budgetedTime;
+	public Calendar startWeek = new GregorianCalendar();
+	public Calendar endWeek = new GregorianCalendar();
+	public boolean isPersonal;
+	
+	public Activity(String name, int budgetedTime, Calendar startWeek, Calendar endWeek, boolean isPersonal) {
+		this.name = name;
+		this.budgetedTime = budgetedTime;
+		this.startWeek = startWeek;
+		this.endWeek = endWeek;
+		this.isPersonal = isPersonal;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public Employee getProjectManager() {
+		return projectManager;
+	}
+	
+	public void setProjectManager(Employee employee) {
+		projectManager = employee;
+	}
+	
+	public void setStartWeek(Calendar startWeek) {
+		this.startWeek.setTime(startWeek.getTime());
+	}
+
+}

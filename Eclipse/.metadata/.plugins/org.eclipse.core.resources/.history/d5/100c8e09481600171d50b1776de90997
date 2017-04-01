@@ -12,7 +12,6 @@ public class ProjectApp {
 	
 	private int serialNumberCounter;
 	public List<Employee> employees = new ArrayList<Employee>(); // Employees registered in the application
-	public List<Project> projects = new ArrayList<Project>(); // Projects in the application
 	public Employee activeUser;
 	public DateServer ds = new DateServer();
 
@@ -72,26 +71,6 @@ public class ProjectApp {
 			}
 		}
 		return null;
-	}
-	
-	public List<Project> getProjects() {
-		return projects;
-	}
-	
-	void createNewProject(String name) {
-		if (employeeLoggedIn()) {
-			Project newProject = new Project(name, generateId(), activeUser);
-			projects.add(newProject);
-		}
-	}
-	
-	private int generateId() {
-		serialNumberCounter++;
-		return serialNumberCounter;
-	}
-
-	void setProjectManager(Project project, Employee employee) {
-		project.setProjectManager(employee);
 	}
 	
 }

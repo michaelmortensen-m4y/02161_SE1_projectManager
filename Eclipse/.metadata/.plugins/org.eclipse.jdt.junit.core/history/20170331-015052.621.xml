@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="TestRegisterNewEmployee" project="projectManagentApp" tests="4" started="4" failures="0" errors="0" ignored="0">
-  <testsuite name="dtu.project.app.TestRegisterNewEmployee" time="0.0">
-    <testcase name="testRegisterWithWrongInitials" classname="dtu.project.app.TestRegisterNewEmployee" time="0.0"/>
-    <testcase name="testRegisterMultipleEmployeesSuccesfully" classname="dtu.project.app.TestRegisterNewEmployee" time="0.0"/>
-    <testcase name="testRegisterEmployee" classname="dtu.project.app.TestRegisterNewEmployee" time="0.0"/>
-    <testcase name="testRegisterMultipleEmployees" classname="dtu.project.app.TestRegisterNewEmployee" time="0.0"/>
-  </testsuite>
-</testrun>
