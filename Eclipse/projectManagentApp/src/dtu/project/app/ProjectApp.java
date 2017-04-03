@@ -10,7 +10,7 @@ public class ProjectApp {
 	public static final int INITIALS_MAX_LENGTH = 4;
 	public static final int INITIALS_MIN_LENGTH = 1;
 	
-	private int serialNumberCounter;
+	public int serialNumberCounter;
 	public List<Employee> employees = new ArrayList<Employee>(); // Employees registered in the application
 	public List<Project> projects = new ArrayList<Project>(); // Projects in the application
 	public Employee activeUser;
@@ -29,7 +29,7 @@ public class ProjectApp {
 		if (initialsAccepted(initials)) {
 			Employee newEmployee = new Employee(initials);
 			employees.add(newEmployee);
-			login(newEmployee);
+			login(initials);
 		}
 	}
 	
@@ -42,9 +42,9 @@ public class ProjectApp {
 				getEmployeeByInitials(initials) == null;
 	}
 	
-	void login(Employee employee) {
+	void login(String initials) {
 		if (!employeeLoggedIn()) {
-			activeUser = employee; // set active user as the employee
+			activeUser = getEmployeeByInitials(initials); // set active user as the employee
 		}
 	}
 	
@@ -92,6 +92,24 @@ public class ProjectApp {
 
 	void setProjectManager(Project project, Employee employee) {
 		project.setProjectManager(employee);
+	}
+	
+	public Project getProjectById(int id) {
+		for (Project project : projects) {
+			if (project.getId() == id) {
+				return project;
+			}
+		}
+		return null;
+	}
+	
+	public Project getProjectByManager(Employee employee) {
+		for (Project project : projects) {
+			if (project.getProjectManager().equals(employee)) {
+				return project;
+			}
+		}
+		return null;
 	}
 	
 }

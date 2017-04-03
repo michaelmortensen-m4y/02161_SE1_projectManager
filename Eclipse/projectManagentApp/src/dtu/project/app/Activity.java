@@ -14,8 +14,8 @@ public class Activity {
 	private boolean isPersonal;
 	
 	public Activity(String name, int budgetedTime, Calendar startWeek, Calendar endWeek, boolean isPersonal) {
-		this.name = name;
-		this.budgetedTime = budgetedTime;
+		setName(name);
+		setBudgetedTime(budgetedTime);
 		setStartWeek(startWeek);
 		setEndWeek(endWeek);
 		this.isPersonal = isPersonal;
@@ -47,6 +47,14 @@ public class Activity {
 	
 	public void setEndWeek(Calendar endWeek) {
 		this.endWeek = endWeek.WEEK_OF_YEAR;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setBudgetedTime(int budgetedTime) {
+		this.budgetedTime = budgetedTime;
 	}
 
 }

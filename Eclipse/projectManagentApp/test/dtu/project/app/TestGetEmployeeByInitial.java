@@ -16,7 +16,7 @@ import org.junit.Test;
  * @author group 9
  *
  */
-public class TestGetEmployeeByInitial extends SampleDataSetup {
+public class TestGetEmployeeByInitial extends SampleDataSetup1 {
 	/** 
 	 * Tests searching for employees by initials.
 	 * <ol>
@@ -52,42 +52,30 @@ public class TestGetEmployeeByInitial extends SampleDataSetup {
 	/** 
 	 * Tests registering multiple employees with the same initials.
 	 * <ol>
-	 *  <li> The user registers a new employee
-	 * 	<li> The user logs out
-	 * 	<li> The user registers another employee with the same initial
+	 * 	<li> The user tries to register a new employee with initials already used by another employee
 	 *  <li> The application knows that there can not exist multiple employees with the same initials
 	 * </ol>
 	 */
 	@Test
-	public void testRegisterAnAllreadyExistingEmployee() {
+	public void testRegisterAnAlreadyExistingEmployee() {
 
-		ProjectApp projectApp = new ProjectApp();
+		//ProjectApp projectApp = new ProjectApp();
 		
 		List<Employee> employees = projectApp.getEmployees();
-		assertEquals(0, employees.size());
+		assertEquals(8, employees.size()); // Comes from SampleDataSetup.java
 		
 		// Check first that the user is not logged in as an employee.
 		
 		assertFalse(projectApp.employeeLoggedIn());
 		
-		// Step 1) Register an employee
-		
-		projectApp.registerNewEmployee("abcd");
-		
-		assertTrue(projectApp.employeeLoggedIn());
-		
-		employees = projectApp.getEmployees();
-		assertEquals(1, employees.size());
-		
-		// Step 2) Logout and try to register another employee with the same initials
-		
-		projectApp.logout();
+		// Step 1) Register an employee with initials already used by another employee
 		
 		projectApp.registerNewEmployee("abcd");
 		
 		assertFalse(projectApp.employeeLoggedIn());
 		
-		assertEquals(1, employees.size());
+		assertEquals(8, employees.size());
+	
 	}
 
 }

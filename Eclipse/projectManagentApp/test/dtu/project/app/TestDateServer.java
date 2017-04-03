@@ -7,7 +7,7 @@ import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
-public class TestDateServer extends SampleDataSetup {
+public class TestDateServer extends SampleDataSetup1 {
 
 	/***
 	 * Tests that getDate function of the DateServer returns the current date.

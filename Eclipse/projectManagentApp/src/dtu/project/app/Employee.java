@@ -1,6 +1,7 @@
 package dtu.project.app;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Employee {
@@ -9,7 +10,7 @@ public class Employee {
 	
 	private String initials;
 	public int activityLimit;
-	public List<Activity> joinedActivities = new ArrayList<Activity>(); // Activities the employee is in
+	public List<Activity> joinedActivities = new ArrayList<Activity>(); // Activities the employee is in (including personal)
 	
 	public Employee(String initials) {
 		this.initials = initials;
@@ -28,11 +29,22 @@ public class Employee {
 		activityLimit = limit;
 	}
 	
+	public List<Activity> getActivities() {
+		return joinedActivities;
+	}
+	
 	public void addToActivity(Activity activity) {
-		joinedActivities.add(activity);
+		if (joinedActivities.size() < activityLimit) {
+			joinedActivities.add(activity);
+		}
 	}
 	
 	public void removeFromActivity(Activity activity) {
 		joinedActivities.remove(activity);
+	}
+	
+	public void createPersonalActivity(String name, Calendar startWeek, Calendar endWeek) {
+		Activity newActivity = new Activity(name, -1, startWeek, endWeek, true);
+		addToActivity(newActivity);
 	}
 }

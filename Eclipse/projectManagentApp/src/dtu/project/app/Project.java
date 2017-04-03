@@ -1,6 +1,7 @@
 package dtu.project.app;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Project {
@@ -38,6 +39,20 @@ public class Project {
 	
 	public void removeActivity(Activity activity) {
 		activities.remove(activity);
+	}
+	
+	public void createActivity(String name, int budgetedTime, Calendar startWeek, Calendar endWeek) {
+		Activity newActivity = new Activity(name, budgetedTime, startWeek, endWeek, false);
+		addActivity(newActivity);
+	}
+	
+	public Activity getActivityByName(String name) {
+		for (Activity activity : activities) {
+			if (activity.getName().equals(name)) {
+				return activity;
+			}
+		}
+		return null;
 	}
 
 }

@@ -1,6 +1,7 @@
 package dtu.project.app;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -14,7 +15,7 @@ import org.junit.Test;
  * @author group 9
  *
  */
-public class TestCreateNewProject extends SampleDataSetup {
+public class TestCreateNewProject extends SampleDataSetup1 {
 	/** 
 	 * Tests the scenario when an employee successfully creates a new project and is automatically set as project manager.
 	 * <ol>
@@ -25,17 +26,91 @@ public class TestCreateNewProject extends SampleDataSetup {
 	 */
 	@Test
 	public void testCreateProject() {
-
-		ProjectApp projectApp = new ProjectApp();
 		
 		List<Project> projects = projectApp.getProjects();
 		assertEquals(0, projects.size());
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		projectApp.login("abcd");
 		
 		assertTrue(projectApp.employeeLoggedIn());
 		
 		projectApp.createNewProject("project 1");
 		
+		assertEquals(1, projects.size());
+		assertEquals("project 1", projectApp.getProjectById(projectApp.serialNumberCounter).getName());
+		assertEquals(projectApp.activeUser, projectApp.getProjectById(projectApp.serialNumberCounter).getProjectManager());
+	}
+	
+	/** 
+	 * Tests the scenario when an employee successfully creates a new project and is automatically set as project manager and then changes the project manager to another employee.
+	 * <ol>
+	 *  <li> The employee is logged in
+	 * 	<li> The employee provides a name for the project
+	 *  <li> The project application creates a new project with that name and generates a unique serial number and sets the project manager as the employee
+	 * 	<li> The employee sets a new project manager for the existing project
+	 *  <li> The project application sets the new project manager
+	 * </ol>
+	 */
+	@Test
+	public void testSetNewManager() {
+		
+		List<Project> projects = projectApp.getProjects();
 		assertEquals(0, projects.size());
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		projectApp.login("abcd");
+		
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		projectApp.createNewProject("project 1");
+		
+		assertEquals(1, projects.size());
+		
+		assertEquals(projectApp.getEmployeeByInitials("abcd"), projectApp.getProjectById(projectApp.serialNumberCounter).getProjectManager());
+		
+		projectApp.setProjectManager(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getEmployeeByInitials("efgh"));
+		
+		assertEquals(projectApp.getEmployeeByInitials("efgh"), projectApp.getProjectById(projectApp.serialNumberCounter).getProjectManager());
+		
+	}
+	
+	/** 
+	 * Tests get project by manager even when the manager changes.
+	 * <ol>
+	 *  <li> The employee is logged in
+	 * 	<li> The employee provides a name for the project
+	 *  <li> The project application creates a new project with that name and generates a unique serial number and sets the project manager as the employee
+	 * 	<li> The employee sets a new project manager for the existing project
+	 *  <li> The project application sets the new project manager
+	 * </ol>
+	 */
+	@Test
+	public void testGetProjectByManagerEvenWhenSettingANewManager() {
+		
+		List<Project> projects = projectApp.getProjects();
+		assertEquals(0, projects.size());
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		projectApp.login("abcd");
+		
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		projectApp.createNewProject("project 1");
+		
+		assertEquals(1, projects.size());
+		
+		assertEquals(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getProjectByManager(projectApp.getEmployeeByInitials("abcd")));
+		assertNull(projectApp.getProjectByManager(projectApp.getEmployeeByInitials("efgh")));
+		
+		projectApp.setProjectManager(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getEmployeeByInitials("efgh"));
+		
+		assertEquals(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getProjectByManager(projectApp.getEmployeeByInitials("efgh")));
+		assertNull(projectApp.getProjectByManager(projectApp.getEmployeeByInitials("abcd")));
+		
 	}
 
 }
