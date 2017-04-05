@@ -9,8 +9,8 @@ public class Activity {
 	
 	private String name;
 	private int budgetedTime;
-	private Calendar startWeek;
-	private Calendar endWeek;
+	private int startWeek;
+	private int endWeek;
 	private boolean isPersonal;
 	
 	public Activity(String name, int budgetedTime, Calendar startWeek, Calendar endWeek, boolean isPersonal) {
@@ -29,11 +29,11 @@ public class Activity {
 		return budgetedTime;
 	}
 	
-	public Calendar getStartWeek() {
+	public int getStartWeek() {
 		return startWeek;
 	}
 	
-	public Calendar getEndWeek() {
+	public int getEndWeek() {
 		return endWeek;
 	}	
 	
@@ -42,11 +42,11 @@ public class Activity {
 	}
 	
 	public void setStartWeek(Calendar startWeek) {
-		this.startWeek = startWeek;
+		this.startWeek = startWeek.WEEK_OF_YEAR;
 	}
 	
 	public void setEndWeek(Calendar endWeek) {
-		this.endWeek = endWeek;
+		this.endWeek = endWeek.WEEK_OF_YEAR;
 	}
 	
 	public void setName(String name) {

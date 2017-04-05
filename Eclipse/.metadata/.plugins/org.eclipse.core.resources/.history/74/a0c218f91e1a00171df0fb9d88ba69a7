@@ -52,7 +52,7 @@ public class Employee {
 		Activity Act;
 		int maxact = 0;
 		Calendar calendar = startWeek;
-		while(!calendar.equals(endWeek)) {
+		while(calendar != endWeek) {
 			for (int i = 0; i < joinedActivities.size(); i++) {
 				Act = joinedActivities.get(i);
 				if((calendar.before(Act.getEndWeek())) || calendar.before(Act.getStartWeek())) {
@@ -63,7 +63,7 @@ public class Employee {
 				return false;
 			}
 			maxact = 0;
-			calendar.add(Calendar.WEEK_OF_YEAR, 1);
+			calendar.add(Calendar.WEEK_OF_MONTH, 1);
 		}	
 		return true;
 	}
