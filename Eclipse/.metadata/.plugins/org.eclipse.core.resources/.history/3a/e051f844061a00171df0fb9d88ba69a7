@@ -87,14 +87,6 @@ public class SampleDataSetup2 {
 		employee = projectApp.getEmployeeByInitials("efgh");
 		employee.addToActivity(activity);
 		
-		activity = projectApp.getProjectById(1).getActivityByName("activity 2 in project 1");
-		
-		employee = projectApp.getEmployeeByInitials("abcd");
-		employee.addToActivity(activity);
-		
-		employee = projectApp.getEmployeeByInitials("efgh");
-		employee.addToActivity(activity);
-		
 		// Add the employee called "abcd" to the first activity in project 2
 		activity = projectApp.getProjectById(2).getActivityByName("activity 1 in project 2");
 		employee = projectApp.getEmployeeByInitials("abcd");
@@ -111,64 +103,6 @@ public class SampleDataSetup2 {
 		
 		// Register 1 more employee who is a project manager for a project
 		projectApp.registerNewEmployee("ooaa");
-		projectApp.createNewProject("project 3");
-		
-		// Create start and end week calendar objects
-		startWeek = new GregorianCalendar();
-		endWeek = new GregorianCalendar();
-		
-		// Set start and end week
-		startWeek.set(startWeek.WEEK_OF_YEAR, 2);
-		endWeek.set(endWeek.WEEK_OF_YEAR, 2);
-		// Create a new activity for the project
-		projectApp.getProjectById(3).createActivity("activity 1 in project 3", 4, startWeek, endWeek);
-		
-		// Create a second activity for the same project and with other start and end weeks
-		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
-		endWeek.set(endWeek.WEEK_OF_YEAR, 4);
-		projectApp.getProjectById(3).createActivity("activity 2 in project 3", 8, startWeek, endWeek);
-		
-		// Create a second project
-		projectApp.createNewProject("project 4");
-		
-		// Create activities for the second project with different start and end weeks
-		startWeek.set(startWeek.WEEK_OF_YEAR, 5);
-		endWeek.set(endWeek.WEEK_OF_YEAR, 6);
-		projectApp.getProjectById(4).createActivity("activity 1 in project 4", 15, startWeek, endWeek);
-		
-		startWeek.set(startWeek.WEEK_OF_YEAR, 5);
-		endWeek.set(endWeek.WEEK_OF_YEAR, 7);
-		projectApp.getProjectById(4).createActivity("activity 2 in project 4", 8, startWeek, endWeek);
-		
-		// Add the employees called "abcd" and "ijkl" to both activities in project 3
-		activity = projectApp.getProjectById(4).getActivityByName("activity 1 in project 3");
-		
-		employee = projectApp.getEmployeeByInitials("abcd");
-		employee.addToActivity(activity);
-		
-		employee = projectApp.getEmployeeByInitials("ijkl");
-		employee.addToActivity(activity);
-		
-		activity = projectApp.getProjectById(4).getActivityByName("activity 2 in project 3");
-		
-		employee = projectApp.getEmployeeByInitials("abcd");
-		employee.addToActivity(activity);
-		
-		employee = projectApp.getEmployeeByInitials("ijkl");
-		employee.addToActivity(activity);
-		
-		// Add the employee called "efgh" to the first activity in project 4
-		activity = projectApp.getProjectById(4).getActivityByName("activity 1 in project 4");
-		employee = projectApp.getEmployeeByInitials("efgh");
-		employee.addToActivity(activity);
-		
-		// Add the employee called "ijkl" to all activities in project 4
-		activity = projectApp.getProjectById(4).getActivityByName("activity 1 in project 4");
-		employee = projectApp.getEmployeeByInitials("ijkl");
-		employee.addToActivity(activity);
-		activity = projectApp.getProjectById(4).getActivityByName("activity 2 in project 4");
-		employee.addToActivity(activity);
-		
 		projectApp.logout();
 		
 	}
