@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.collections.*?>
+
+<?language javascript?>
+<GridPane fx:id="createNewProjectWindow" prefHeight="600.0" prefWidth="600.0" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CreateNewProjectMenuController">
+    <TextField fx:id="newProjectNameField" text="Project name" prefWidth="130" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="10.0" /></GridPane.margin>
+    </TextField>
+    <Button fx:id="createButton" mnemonicParsing="false" text="Create" prefWidth="60" onMouseClicked="#createNewProjectMouseClicked" GridPane.columnIndex="0" GridPane.rowIndex="1">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="2.0" /></GridPane.margin>
+    </Button>
+    <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel" prefWidth="60" onMouseClicked="#cancelMouseClicked" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="2.0" /></GridPane.margin>
+    </Button>
+</GridPane>
+
+<!-- <GridPane fx:id="createNewProjectWindow" prefHeight="600.0" prefWidth="600.0" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CreateNewProjectMenuController">
+    <TextField fx:id="newProjectNameField" text="Project name" prefWidth="130" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="10.0" /></GridPane.margin>
+    </TextField>
+    <TextField fx:id="activityField" text="Activity name" prefWidth="130" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="10.0" /></GridPane.margin>
+    </TextField>
+    <Button fx:id="addButton" mnemonicParsing="false" text="Add" prefWidth="60" onMouseClicked="#addActivityMouseClicked" GridPane.columnIndex="0" GridPane.rowIndex="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="2.0" /></GridPane.margin>
+    </Button>
+    <Button fx:id="removeButton" mnemonicParsing="false" text="Remove" prefWidth="60" onMouseClicked="#removeActivityMouseClicked" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="2.0" /></GridPane.margin>
+    </Button>
+    <Button fx:id="okButton" mnemonicParsing="false" text="OK" prefWidth="140" onMouseClicked="#createNewProjectMouseClicked" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="50.0" /></GridPane.margin>
+    </Button>
+    <Button fx:id="cancelButton" mnemonicParsing="false" text="Cancel" prefWidth="140" onMouseClicked="#cancelMouseClicked" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="0.0" top="2.0" /></GridPane.margin>
+    </Button>
+    <Label text="Added activities:" GridPane.columnIndex="2" GridPane.rowIndex="0">
+      <GridPane.margin><Insets left="30.0" right="10.0" bottom="0" top="0" /></GridPane.margin>
+    </Label>
+    <TextArea fx:id="addedActivitiesTextArea" PrefRowCount="8" WrapText="false" editable="false" focusTraversable="false" prefWidth="200" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="4">
+      <GridPane.margin><Insets left="30.0" right="10.0" bottom="0" top="0" /></GridPane.margin>
+    </TextArea>
+</GridPane> -->
