@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.collections.*?>
+
+<?language javascript?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500" minWidth="600" prefHeight="530.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+    <children>
+      <MenuBar fx:id="MainNavBar">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="log out" onAction="#logoutMenuEvent" />
+              <MenuItem mnemonicParsing="false" text="Close" onAction="#closeStage" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Tools">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Run SampleDataSetup1" onAction="#notImplementedMenuEvent"/>
+              <MenuItem mnemonicParsing="false" text="Run SampleDataSetup2" onAction="#notImplementedMenuEvent"/>
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <StackPane fx:id="windowHolder" VBox.vgrow="ALWAYS" prefHeight="300"/>
+      <TextArea fx:id="outputTextArea" PrefRowCount="5" WrapText="true" editable="false" focusTraversable="false"></TextArea>
+    </children>
+  <fx:script>
+  </fx:script>
+</VBox>

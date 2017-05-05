@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.collections.*?>
+
+<?language javascript?>
+<GridPane fx:id="listProjectsWindow" prefHeight="600.0" prefWidth="600.0" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ListProjectsMenuController">
+    <Button fx:id="listAllProjectsButton" mnemonicParsing="false" text="List all projects" prefWidth="170" onMouseClicked="#listAllProjectsMouseClicked" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="10.0" top="2.0" /></GridPane.margin>
+    </Button>
+    <TextField fx:id="managerInitialsField" text="Manager initials" prefWidth="105" GridPane.columnIndex="0" GridPane.rowIndex="2">
+      <GridPane.margin><Insets left="10.0" right="2.0" bottom="2.0" top="2.0" /></GridPane.margin>
+    </TextField>
+    <Button fx:id="byManagerInitialsButton" mnemonicParsing="false" text="Search" prefWidth="60" onMouseClicked="#searchByManagerMouseClicked" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <GridPane.margin><Insets left="2.0" right="0.0" bottom="2.0" top="2.0" /></GridPane.margin>
+    </Button>
+    <TextField fx:id="idField" text="Serial number" prefWidth="105" GridPane.columnIndex="0" GridPane.rowIndex="3">
+      <GridPane.margin><Insets left="10.0" right="2.0" bottom="0.0" top="70.0" /></GridPane.margin>
+    </TextField>
+    <Button fx:id="editByIdButton" mnemonicParsing="false" text="Edit" prefWidth="60" onMouseClicked="#editByIdMouseClicked" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <GridPane.margin><Insets left="2.0" right="0.0" bottom="0.0" top="70.0" /></GridPane.margin>
+    </Button>
+    <Button fx:id="backButton" mnemonicParsing="false" text="Back" prefWidth="170" onMouseClicked="#backMouseClicked" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2">
+      <GridPane.margin><Insets left="10.0" right="10.0" bottom="0.0" top="60.0" /></GridPane.margin>
+    </Button>
+    <Label text="Projects searchresult:" GridPane.columnIndex="2" GridPane.rowIndex="0">
+      <GridPane.margin><Insets left="20.0" right="10.0" bottom="0" top="0" /></GridPane.margin>
+    </Label>
+    <TextArea fx:id="projectsTextArea" PrefRowCount="15" WrapText="false" editable="false" focusTraversable="false" prefWidth="350" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="4">
+      <GridPane.margin><Insets left="20.0" right="10.0" bottom="0" top="0" /></GridPane.margin>
+    </TextArea>
+</GridPane>
