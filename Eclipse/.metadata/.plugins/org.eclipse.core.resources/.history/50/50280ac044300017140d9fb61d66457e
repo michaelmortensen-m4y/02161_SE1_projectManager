@@ -1,0 +1,180 @@
+package application;
+
+import static org.junit.Assert.*;
+
+import java.util.List;
+
+import org.junit.Test;
+
+/**
+ * This class contains tests, testing the functionality of logging working time for activities.
+ * @author group 9
+ *
+ */
+public class TestLoggingWorkingHours extends SampleDataSetup2 { // Black-box test A
+	/** 
+	 * Tests the scenario when an employee successfully logs integer working time for an activity that he/she is part of.
+	 * <ol>
+	 *  <li> The user is logged in and is added to an activity
+	 *  <li> The user logs working time for the activity 
+	 *  <li> The application registers the logged time and the current date
+	 * </ol>
+	 */
+	@Test
+	public void testLogSuccessfullyInteger() {
+
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// "abcd" is added to activity 1 in project 1 in SampleDataSetup2.java, so now he logs 3 hours as working time for that activity for the current day:
+		Activity activity = projectApp.getProjectById(1).getActivityByName("activity 1 in project 1");
+		Log tempLog = new Log(projectApp.getActiveUser(), activity, 0);
+    	for (Log log : projectApp.getActiveUser().logs) {
+			if (log.getActivity().equals(activity)) {
+				tempLog = log;
+				assertEquals(0, tempLog.getTimeSpent(), 0);
+				try {
+					projectApp.getActiveUser().logActivityTime(tempLog, 3, ProjectAppNavigator.projectApp.getDate());
+				} catch (InvalidWorkingTimeException e) {
+					assertEquals("Input has to be a possitive double type number.", e.getMessage());
+					assertEquals("logActivityTime", e.getOperation());
+					fail("An exception was thrown");
+				}
+				break;
+			}
+		}
+    	assertEquals(3, tempLog.getTimeSpent(), 0);
+		
+	}
+	
+	/** 
+	 * Tests the scenario when an employee successfully logs double type working time for an activity that he/she is part of.
+	 * <ol>
+	 *  <li> The user is logged in and is added to an activity
+	 *  <li> The user logs working time for the activity 
+	 *  <li> The application registers the logged time and the current date
+	 * </ol>
+	 */
+	@Test
+	public void testLogSuccessfullyDouble() { // Black-box test B
+
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// "abcd" is added to activity 1 in project 1 in SampleDataSetup2.java, so now he logs 3.5 hours as working time for that activity for the current day:
+		Activity activity = projectApp.getProjectById(1).getActivityByName("activity 1 in project 1");
+		Log tempLog = new Log(projectApp.getActiveUser(), activity, 0);
+    	for (Log log : projectApp.getActiveUser().logs) {
+			if (log.getActivity().equals(activity)) {
+				tempLog = log;
+				assertEquals(0, tempLog.getTimeSpent(), 0);
+				try {
+					projectApp.getActiveUser().logActivityTime(tempLog, 3.5, ProjectAppNavigator.projectApp.getDate());
+				} catch (InvalidWorkingTimeException e) {
+					assertEquals("Input has to be a possitive double type number.", e.getMessage());
+					assertEquals("logActivityTime", e.getOperation());
+					fail("An exception was thrown");
+				}
+				break;
+			}
+		}
+    	assertEquals(3.5, tempLog.getTimeSpent(), 0);
+		
+	}
+	
+	/** 
+	 * Tests the scenario when an employee unsuccessfully logs negative values for working time for an activity that he/she is part of.
+	 * <ol>
+	 *  <li> The user is logged in and is added to an activity
+	 *  <li> The user tries to log working time for the activity 
+	 *  <li> The application knows that you can not log negative values for working time and notifies the user
+	 * </ol>
+	 */
+	@Test
+	public void testTryLogNegativeDouble() { // Black-box test C
+
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// "abcd" is added to activity 1 in project 1 in SampleDataSetup2.java, so now he tries to log -3.5 hours as working time for that activity for the current day:
+		Activity activity = projectApp.getProjectById(1).getActivityByName("activity 1 in project 1");
+		Log tempLog = new Log(projectApp.getActiveUser(), activity, 0);
+    	for (Log log : projectApp.getActiveUser().logs) {
+			if (log.getActivity().equals(activity)) {
+				tempLog = log;
+				assertEquals(0, tempLog.getTimeSpent(), 0);
+				try {
+					projectApp.getActiveUser().logActivityTime(tempLog, -3.5, ProjectAppNavigator.projectApp.getDate());
+					fail("An exception should have been thrown");
+				} catch (InvalidWorkingTimeException e) {
+					assertEquals("Input has to be a possitive double type number.", e.getMessage());
+					assertEquals("logActivityTime", e.getOperation());
+					break;
+				}
+			}
+		}
+    	assertEquals(0, tempLog.getTimeSpent(), 0);
+		
+	}
+	
+	/** 
+	 * Tests the scenario when an employee unsuccessfully logs valid working time for an activity that he/she is not a part of.
+	 * <ol>
+	 *  <li> The user is logged in
+	 *  <li> The user tries to log working time for an activity he/she is not a part of
+	 *  <li> The application knows that you can not log working time for an activity that he/she is not a part of and notifies the user
+	 * </ol>
+	 */
+	@Test
+	public void testTryLogTimeButNotPartOfActivity() { // Black-box test C
+
+		try {
+			projectApp.login("ijkl");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// "ijkl" has not been added to activity 1 in project 1 (but others) in SampleDataSetup2.java, so now he tries to log 3.5 hours as working time for that activity:
+		Activity activity = projectApp.getProjectById(1).getActivityByName("activity 1 in project 1");
+		Log tempLog = new Log(projectApp.getActiveUser(), activity, 0);
+    	for (Log log : projectApp.getActiveUser().logs) {
+			System.out.println("hej");
+    		if (log.getActivity().equals(activity)) {
+    			System.out.println("log");
+    			tempLog = log;
+				assertEquals(0, tempLog.getTimeSpent(), 0);
+				try {
+					projectApp.getActiveUser().logActivityTime(tempLog, 3.5, ProjectAppNavigator.projectApp.getDate());
+					fail("The user have not been added to that activity");
+				} catch (InvalidWorkingTimeException e) {
+					assertEquals("Input has to be a possitive double type number.", e.getMessage());
+					assertEquals("logActivityTime", e.getOperation());
+					break;
+				}
+			}
+		}
+    	assertEquals(0, tempLog.getTimeSpent(), 0);
+		
+	}
+	
+}

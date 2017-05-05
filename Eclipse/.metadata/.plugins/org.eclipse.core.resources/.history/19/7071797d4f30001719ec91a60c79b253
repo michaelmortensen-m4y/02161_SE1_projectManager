@@ -1,0 +1,227 @@
+package application;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.List;
+
+import org.junit.Test;
+
+/**
+ * This class contains tests, testing the functionality of adding new employees to the system.
+ * @author group 9
+ *
+ */
+public class TestRegisterNewEmployee {
+	/** 
+	 * Tests the scenario when an unregistered user successfully creates a new employee account.
+	 * <ol>
+	 *  <li> The user provides initials
+	 * 	<li> The project application check if the initials comply to the rules
+	 *  <li> The project application knows that the user is logged in as the new employee 
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterEmployee() { // Black-box test A and white-box test A
+
+		ProjectApp projectApp = new ProjectApp();
+		
+		List<Employee> employees = projectApp.getEmployees();
+		assertEquals(0, employees.size());
+		
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		try {
+			projectApp.registerNewEmployee("abcd");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+			fail("An exception was thrown");
+		}
+
+		// Check that the new employee is set to the active user
+		assertTrue(projectApp.employeeLoggedIn());
+		
+		// Check that the new employee is added in the system
+		assertEquals(1, employees.size());
+	}
+	
+	/** 
+	 * Tests the scenario when an unregistered user tries to create a new employee account with invalid initials.
+	 * <ol>
+	 *  <li> The user provides initials that does not comply with the rules
+	 * 	<li> The project application check if the initials comply to the rules
+	 *  <li> The project application knows that the user entered invalid initials and notifies the user of the fact
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterWithInvalidInitials() { // Black-box test B and White-box test B,C,E
+
+		ProjectApp projectApp = new ProjectApp();
+		List<Employee> employees = projectApp.getEmployees();
+		
+		// Check first that the user is not logged in as an employee.
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		// Try to register with different initials
+		try {
+			projectApp.registerNewEmployee("a.b");		 //Should not pass
+			fail("An exception should have been thrown");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+		}
+		
+		try {
+			projectApp.registerNewEmployee("abcde");	 //Should not pass
+			fail("An exception should have been thrown");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+		}
+		
+		try {
+			projectApp.registerNewEmployee("");		    //Should not pass
+			fail("An exception should have been thrown");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+		}
+		
+		// Check that no employees have been added to the system
+		assertEquals(0, employees.size());
+	}
+
+	/** 
+	 * Tests registering a new employee while already logged in.
+	 * <ol>
+	 *  <li> The user registers a new employee
+	 * 	<li> The user registers another employee
+	 *  <li> The project application knows that the user can not register an employee while logged in as one
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterMultipleEmployees() { // Black-box test C
+
+		ProjectApp projectApp = new ProjectApp();
+		List<Employee> employees = projectApp.getEmployees();
+		
+		// Check first that the user is not logged in as an employee.
+		assertFalse(projectApp.employeeLoggedIn());
+		
+		// Step 1) Register an employee
+		try {
+			projectApp.registerNewEmployee("abcd");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Try to register another employee without logging out the previously created employee
+		try {
+			projectApp.registerNewEmployee("efgh");
+			fail("An exception should have been thrown");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+		}
+		
+		// Check that still only one employee is registered and that it is the first one registered
+		assertEquals(1, employees.size());
+		assertEquals("abcd", employees.get(0).getInitials());
+	}
+	
+	/** 
+	 * Tests registering a the same employee twice.
+	 * <ol>
+	 *  <li> The user registers a new employee
+	 *  <li> The user logs out
+	 * 	<li> The user tries to register another employee with the same initials
+	 *  <li> The project application knows that the user can not register an employee already existing in the system
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterSameEmployeeTwice() { // White-box test D
+
+		ProjectApp projectApp = new ProjectApp();
+		List<Employee> employees = projectApp.getEmployees();
+		
+		// Register an employee
+		try {
+			projectApp.registerNewEmployee("abcd");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Logout
+		projectApp.logout();
+		
+		// Try to register another employee with same initials
+		try {
+			projectApp.registerNewEmployee("abcd");
+			fail("An exception should have been thrown");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+		}
+		
+		// Check that still only one employee is registered and that it is "abcd"
+		assertEquals(1, employees.size());
+		assertEquals("abcd", employees.get(0).getInitials());
+	}
+	
+	/** 
+	 * Tests registering multiple employees successfully.
+	 * <ol>
+	 *  <li> The user successfully registers a new employee
+	 * 	<li> The user logs out
+	 * 	<li> The user successfully registers another employee
+	 * </ol>
+	 */
+	@Test
+	public void testRegisterMultipleEmployeesSuccesfully() { // Black-box test D
+
+		ProjectApp projectApp = new ProjectApp();
+		
+		List<Employee> employees = projectApp.getEmployees();
+		assertEquals(0, employees.size());
+		
+		// Register an employee
+		try {
+			projectApp.registerNewEmployee("abcd");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Logout and register another employee
+		projectApp.logout();
+		
+		try {
+			projectApp.registerNewEmployee("efgh");
+		} catch (InitialsInvalidException e) {
+			assertEquals("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", e
+					.getMessage());
+			assertEquals("RegisterNewEmployee", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Check that both employees have been registered in the system
+		assertEquals(2, employees.size());
+	}
+
+}

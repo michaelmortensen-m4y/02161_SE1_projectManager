@@ -1,0 +1,320 @@
+package application;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.junit.Test;
+
+/**
+ * This class contains tests, testing the functionality of adding projects to the system.
+ * @author group 9
+ *
+ */
+public class TestCreateNewProject extends SampleDataSetup1 {
+	/** 
+	 * Tests the scenario when an employee successfully creates a new project and is automatically set as project manager.
+	 * <ol>
+	 *  <li> The employee is logged in
+	 * 	<li> The employee provides a name for the project
+	 *  <li> The project application creates a new project with that name and generates a unique serial number
+	 * </ol>
+	 */
+	@Test
+	public void testCreateProject() {
+		
+		List<Project> projects = projectApp.getProjects();
+
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Check with valid name and logged in
+		projectApp.createNewProject("project 1");
+		assertEquals(1, projects.size());
+		
+		// Check that the fields contains the correct information
+		assertEquals("project 1", projectApp.getProjectById(projectApp.serialNumberCounter).getName());
+		assertEquals(projectApp.activeUser, projectApp.getProjectById(projectApp.serialNumberCounter).getProjectManager());
+		
+		// Check when invalid name and logged in
+		projectApp.createNewProject(" ");
+		assertEquals(1, projects.size());
+		
+		// Check when logged out
+		projectApp.logout();
+		projectApp.createNewProject("project 2");
+		projectApp.createNewProject(" ");
+		assertEquals(1, projects.size());
+	}
+	
+	/** 
+	 * Tests the scenario when an employee successfully creates a new project and is automatically set as project manager and then changes the project manager to another employee.
+	 * <ol>
+	 *  <li> The employee is logged in
+	 * 	<li> The employee provides a name for the project
+	 *  <li> The project application creates a new project with that name and generates a unique serial number and sets the project manager as the employee
+	 * 	<li> The employee sets a new project manager for the existing project
+	 *  <li> The project application sets the new project manager
+	 * </ol>
+	 */
+	@Test
+	public void testSetNewManager() { 
+		
+		List<Project> projects = projectApp.getProjects();
+		assertEquals(0, projects.size());
+		
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		projectApp.createNewProject("project 1");
+		assertEquals(1, projects.size());
+		
+		// Check that the project object returns the correct project manager "abcd"
+		assertEquals(projectApp.getEmployeeByInitials("abcd"), projectApp.getProjectById(projectApp.serialNumberCounter).getProjectManager());
+		
+		// Set another employee as project manager
+		projectApp.setProjectManager(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getEmployeeByInitials("efgh"));
+		
+		// Check that the project object returns the new correct project manager "efgh"
+		assertEquals(projectApp.getEmployeeByInitials("efgh"), projectApp.getProjectById(projectApp.serialNumberCounter).getProjectManager());
+		
+	}
+	
+	/** 
+	 * Tests get project by manager even when the manager changes.
+	 * <ol>
+	 *  <li> The employee is logged in
+	 * 	<li> The employee provides a name for the project
+	 *  <li> The project application creates a new project with that name and generates a unique serial number and sets the project manager as the employee
+	 * 	<li> The employee sets a new project manager for the existing project
+	 *  <li> The project application sets the new project manager
+	 * </ol>
+	 */
+	@Test
+	public void testGetProjectByManagerEvenWhenSettingANewManager() {
+		
+		List<Project> projects = projectApp.getProjects();
+		assertEquals(0, projects.size());
+		
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		projectApp.createNewProject("project 1");
+		assertEquals(1, projects.size());
+		
+		// Check that the project object returns the correct project manager
+		assertEquals(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getProjectsByManager(projectApp.getEmployeeByInitials("abcd")).get(0));
+		// Check that "abcd" is project manager of one project
+		assertEquals(1, projectApp.getProjectsByManager(projectApp.getEmployeeByInitials("abcd")).size());
+		
+		// Set another employee as project manager
+		projectApp.setProjectManager(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getEmployeeByInitials("efgh"));
+		
+		// Check that the project object returns the correct project manager
+		assertEquals(projectApp.getProjectById(projectApp.serialNumberCounter), projectApp.getProjectsByManager(projectApp.getEmployeeByInitials("efgh")).get(0));
+		// Check that "abcd" is no longer project manager for any projects
+		assertEquals(0, projectApp.getProjectsByManager(projectApp.getEmployeeByInitials("abcd")).size());
+		
+	}
+	
+	/** 
+	 * Tests that creating a new activity adds the activity to the project.
+	 * <ol>
+	 *  <li> The employee is logged in and creates a new project
+	 *  <li> The employee provides a valid name for a new activity and creates it
+	 *  <li> Check that the new activity returns correct information
+	 * </ol>
+	 */
+	@Test
+	public void testCreateNewActivity() { // Black-box test A
+		
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		projectApp.createNewProject("project 1");
+		
+		// Check that active employee is project manager for the newly created project
+		assertEquals("abcd", projectApp.getActiveUser().getInitials());
+		
+		// Create start and end week calendar objects
+		Calendar startWeek = new GregorianCalendar();
+		Calendar endWeek = new GregorianCalendar();
+		
+		// Set start and end week
+		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
+		endWeek.set(endWeek.WEEK_OF_YEAR, 3);
+		
+		// Check that no activities have been added yet
+		assertEquals(0, projectApp.getProjectById(1).getActivities().size());
+		
+		// Create a new activity for the project
+		projectApp.getProjectById(1).createActivity("activity 1", 15, startWeek, endWeek);
+	
+		// Check that 1 activity have been added and that the fields in the activity object is set with the correct information
+		assertEquals(1, projectApp.getProjectById(1).getActivities().size());
+		assertEquals("activity 1", projectApp.getProjectById(1).getActivities().get(0).getName());
+		assertEquals(projectApp.getProjectById(1).getActivities().get(0), projectApp.getProjectById(1).getActivityByName("activity 1"));
+		assertEquals(15, projectApp.getProjectById(1).getActivities().get(0).getBudgetedTime());
+		assertEquals(startWeek, projectApp.getProjectById(1).getActivities().get(0).getStartWeek());
+		assertEquals(endWeek, projectApp.getProjectById(1).getActivities().get(0).getEndWeek());
+		
+		// Check that no activities with invalid names can be added // Black-box test B
+		projectApp.getProjectById(1).createActivity(" ", 15, startWeek, endWeek);
+		assertEquals(1, projectApp.getProjectById(1).getActivities().size());
+	}
+	
+	/** 
+	 * Tests that creating a new activity while not project manager does not add the activity to the project.
+	 * <ol>
+	 *  <li> The employee is logged in and creates a new project
+	 *  <li> The employee logs out and another employee logs in
+	 *  <li> The other employee tries to add a new activity to the project created earlier
+	 *  <li> The application knows that the other employee is not the project manager and no activities are added
+	 * </ol>
+	 */
+	@Test
+	public void testCreateNewActivityNotManager() { // Black-box test C
+		
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		projectApp.createNewProject("project 1");
+		
+		projectApp.logout();
+		
+		// Login as another employee "efgh"
+		try {
+			projectApp.login("efgh");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"efgh\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Create start and end week calendar objects
+		Calendar startWeek = new GregorianCalendar();
+		Calendar endWeek = new GregorianCalendar();
+		
+		// Set start and end week
+		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
+		endWeek.set(endWeek.WEEK_OF_YEAR, 3);
+		
+		// Create a new activity for the project that "abcd" created
+		projectApp.getProjectById(1).createActivity("activity 1", 15, startWeek, endWeek);
+	
+		// Check that no activity have been added
+		assertEquals(0, projectApp.getProjectById(1).getActivities().size());
+	}
+	
+	/** 
+	 * Tests that...
+	 * <ol>
+	 *  <li> 
+	 * </ol>
+	 */
+	@Test
+	public void testSuccesfullyAddAvailableEmployeeToActivityNotJoined() { // White-box test B
+		
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		projectApp.createNewProject("project 1");
+
+		// Create start and end week calendar objects
+		Calendar startWeek = new GregorianCalendar();
+		Calendar endWeek = new GregorianCalendar();
+		
+		// Set start and end week
+		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
+		endWeek.set(endWeek.WEEK_OF_YEAR, 3);
+		
+		// Create a new activity for the project that "abcd" created
+		projectApp.getProjectById(1).createActivity("activity 1", 15, startWeek, endWeek);
+		
+		// Check that "abcd" has not not joined the activity
+		assertFalse(projectApp.getActiveUser().getActivities().contains(projectApp.getProjectById(projectApp.serialNumberCounter).getActivityByName("activity 1")));
+		
+		// Check that "abcd" is available
+		assertTrue(projectApp.getActiveUser().isAvailable(startWeek, endWeek));
+		
+		// Add "abcd" to activity
+		projectApp.getActiveUser().addToActivity(projectApp.getProjectById(projectApp.serialNumberCounter).getActivityByName("activity 1"));
+		
+		// Check that "abcd" has been added
+		assertTrue(projectApp.getActiveUser().getActivities().contains(projectApp.getProjectById(projectApp.serialNumberCounter).getActivityByName("activity 1")));
+	}
+	
+	/** 
+	 * Tests that...
+	 * <ol>
+	 *  <li> 
+	 * </ol>
+	 */
+	@Test
+	public void testAddAvailableEmployeeToActivityAlreadyJoined() { // White-box test C
+		
+	}
+	
+	/** 
+	 * Tests that...
+	 * <ol>
+	 *  <li> 
+	 * </ol>
+	 */
+	@Test
+	public void testAddEmployeeNotAvailableToActivityNotJoined() { // White-box test D
+		
+	}
+	
+	/** 
+	 * Tests that...
+	 * <ol>
+	 *  <li> 
+	 * </ol>
+	 */
+	@Test
+	public void testAddEmployeeNotAvailableToActivityAlreadyJoined() { // White-box test E
+		
+	}
+
+}
