@@ -20,7 +20,7 @@ public class Activity {
 		setEndWeek(endWeek);
 		this.isPersonal = isPersonal;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public String getName() {
 		return this.name;
 	}
@@ -32,7 +32,7 @@ public class Activity {
 	public Calendar getStartWeek() {
 		return this.startWeek;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public Calendar getEndWeek() {
 		return this.endWeek;
 	}	
@@ -44,7 +44,7 @@ public class Activity {
 	public void setStartWeek(Calendar startWeek) {
 		this.startWeek = startWeek;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public void setEndWeek(Calendar endWeek) {
 		this.endWeek = endWeek;
 	}

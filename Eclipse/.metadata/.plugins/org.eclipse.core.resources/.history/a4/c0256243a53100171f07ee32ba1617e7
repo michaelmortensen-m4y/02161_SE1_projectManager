@@ -19,7 +19,7 @@ public class ProjectApp {
 	public Calendar getDate() {
 		return this.ds.getDate();
 	}
-// By: Andreas T. Kristensen
+// By: Andreas T. Christensen
 	public void setDateServer(DateServer dateServer) {
 		this.ds = dateServer;
 	}
@@ -43,7 +43,7 @@ public class ProjectApp {
 			throw new InitialsInvalidException("Input invalid. Initials does not comply with one or more of the following rules:\n1: Contains only letters (uppercase or lowercase).\n2: Minimum 1 letter.\n3: Maximum 4 letters.\n4: Initials must not already be registered.", "RegisterNewEmployee");
 		}
 	}
-// By: Andreas T. Kristensen
+// By: Andreas T. Christensen
 	public boolean initialsAccepted(String initials) {
 		// return true if user is not logged in and initials comply with the rules and are not already in the system
 		return (!employeeLoggedIn() && 
@@ -68,7 +68,7 @@ public class ProjectApp {
 			this.activeUser = null; // set active user as unregistered
 		}
 	}
-// By: Andreas T. Kristensen
+// By: Andreas T. Christensen
 	public List<Employee> getEmployees() {
 		return this.employees;
 	}
@@ -85,7 +85,7 @@ public class ProjectApp {
 		}
 		return null;
 	}
-// By: Andreas T. Kristensen
+// By: Andreas T. Christensen
 	public List<Project> getProjects() {
 		return this.projects;
 	}
@@ -102,7 +102,7 @@ public class ProjectApp {
 		this.serialNumberCounter++;
 		return this.serialNumberCounter;
 	}
-// By: Andreas T. Kristensen
+// By: Andreas T. Christensen
 	public void setProjectManager(Project project, Employee employee) {
 		project.setProjectManager(employee);
 	}
@@ -125,7 +125,7 @@ public class ProjectApp {
 		}
 		return projectsResult;
 	}
-// By: Andreas T. Kristensen
+// By: Andreas T. Christensen
 	public List<Employee> listAvailableEmployees(Calendar startWeek, Calendar endWeek) {
 		List<Employee> employeesResult = new ArrayList<Employee>();
 		for (Employee employee : this.employees) {

@@ -21,7 +21,7 @@ public class Employee {
 		this.initials = initials;
 		this.activityLimit = DEFAUL_ACTIVITY_LIMIT;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public String getInitials() {
 		return this.initials;
 	}
@@ -33,7 +33,7 @@ public class Employee {
 	public void setActivityLimit(int limit) {
 		this.activityLimit = limit;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public List<Activity> getActivities() {
 		return this.joinedActivities;
 	}
@@ -57,7 +57,7 @@ public class Employee {
 			this.joinedActivities.remove(activity);
 		}
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public void createPersonalActivity(String name, Calendar startWeek, Calendar endWeek) throws AlreadyJoinedWorkActivity {
 		Activity Act;
 		int maxact = 0;
@@ -120,7 +120,7 @@ public class Employee {
 		}
 		return false;
 	}
-// By: Andreas T. Kristensen
+// By: Andreas T. Christensen
 	public void logActivityTime(Activity activity, double hours, Calendar date) throws InvalidWorkingTimeException {
 		Log log = getLogByActivity(activity);
 		if (hours < 0 || log == null) {
@@ -149,7 +149,7 @@ public class Employee {
 		}
 		return (hoursWorked - loggedHours);
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public List<Activity> unloggedActivities(Calendar date) {
 		List<Activity> unloggedActivities = new ArrayList<Activity>();
 		Calendar startCheckDate = new GregorianCalendar();

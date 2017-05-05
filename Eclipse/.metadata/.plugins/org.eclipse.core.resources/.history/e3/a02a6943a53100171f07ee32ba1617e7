@@ -19,7 +19,7 @@ public class Project {
 		this.id = id;
 		this.projectManager = projectManager;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public String getName() {
 		return this.name;
 	}
@@ -31,7 +31,7 @@ public class Project {
 	public int getId() {
 		return this.id;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public Employee getProjectManager() {
 		return this.projectManager;
 	}
@@ -43,7 +43,7 @@ public class Project {
 	public List<Activity> getActivities() {
 		return this.activities;
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public void addActivity(Activity activity) {
 		this.activities.add(activity);
 	}
@@ -61,7 +61,7 @@ public class Project {
 			addActivity(newActivity);
 		}
 	}
-// By: Andreas T. Kristensen	
+// By: Andreas T. Christensen	
 	public Activity getActivityByName(String name) {
 		for (Activity activity : this.activities) {
 			if (activity.getName().equals(name)) {
