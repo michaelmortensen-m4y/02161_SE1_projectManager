@@ -1476,3 +1476,42 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 
 !ENTRY org.eclipse.equinox.ds 1 0 2017-05-03 23:51:17.722
 !MESSAGE Could not bind a reference of component org.eclipse.fx.ide.css.cssext.ui.internal.DefaultCssExtProvider. The reference is: Reference[name = ICSSExtModelProvider, interface = org.eclipse.fx.ide.css.cssext.ICSSExtModelProvider, policy = dynamic, cardinality = 0..n, target = null, bind = bindCssExtensionModelProvider, unbind = unbindCssExtensionModelProvider]
+
+!ENTRY org.eclipse.egit.ui 4 0 2017-05-05 13:28:35.083
+!MESSAGE Failed to refresh projects from index changes
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Errors occurred while refreshing resources with the local file system.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.refreshResource(FileSystemResourceManager.java:977)
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.refresh(FileSystemResourceManager.java:960)
+	at org.eclipse.core.internal.resources.Resource.refreshLocal(Resource.java:1594)
+	at org.eclipse.egit.ui.Activator$ResourceRefreshJob$1.run(Activator.java:519)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2240)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2267)
+	at org.eclipse.egit.ui.Activator$ResourceRefreshJob.run(Activator.java:504)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+Contains: The project description file (.project) for 'JavaFX_contentSwap_example' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+!SUBENTRY 1 org.eclipse.core.resources 4 271 2017-05-05 13:28:35.083
+!MESSAGE Errors occurred while refreshing resources with the local file system.
+!SUBENTRY 2 org.eclipse.core.resources 4 567 2017-05-05 13:28:35.083
+!MESSAGE The project description file (.project) for 'JavaFX_contentSwap_example' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.core.resources 2 2 2017-05-05 13:33:35.053
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2017-05-05 13:33:35.053
+!MESSAGE The project description file (.project) for 'JavaFX_contentSwap_example' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.
+
+!ENTRY com.mountainminds.eclemma.core 4 5013 2017-05-05 15:33:28.603
+!MESSAGE Error while dumping coverage data (code 5013).
+!STACK 0
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.io.DataInputStream.readByte(Unknown Source)
+	at org.jacoco.core.data.ExecutionDataReader.read(ExecutionDataReader.java:85)
+	at com.mountainminds.eclemma.internal.core.MemoryExecutionDataSource.readFrom(MemoryExecutionDataSource.java:68)
+	at com.mountainminds.eclemma.internal.core.launching.AgentServer.run(AgentServer.java:114)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.core.jobs 2 2 2017-05-05 16:52:41.823
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: com.mountainminds.eclemma.internal.core.launching.AgentServer

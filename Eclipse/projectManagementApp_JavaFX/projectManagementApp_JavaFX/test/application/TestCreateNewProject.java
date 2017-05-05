@@ -486,5 +486,208 @@ public class TestCreateNewProject extends SampleDataSetup1 {
 		assertEquals(0, projectApp.getActiveUser().getActivities().size());
 		
 	}
+	
+	/** 
+	 * Tests that an employee successfully can add a personal activity
+	 * <ol>
+	 *  <li> Employee logs in
+	 *  <li> Employee creates a new personal activity
+	 * </ol>
+	 */
+	@Test
+	public void testEmployeePersonalActivity() {
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Create start and end week calendar objects
+		Calendar startWeek = new GregorianCalendar();
+		Calendar endWeek = new GregorianCalendar();
+		
+		// Set start and end week
+		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
+		endWeek.set(endWeek.WEEK_OF_YEAR, 3);
+		
+		// Create a new personal activity
+		try {
+			projectApp.getActiveUser().createPersonalActivity("Vacation", startWeek, endWeek);
+		} catch (AlreadyJoinedWorkActivity e) {
+			assertEquals("You can not have overlab between work activity and personal activity.", e.getMessage());
+			assertEquals("createPersonalActivity", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Verify that acitivity is added
+		assertEquals(1, projectApp.getActiveUser().getActivities().size());
+	}	
+	
+	/** 
+	 * Tests that an available employee adds a personal activity and he/she becomes unavailable
+	 * <ol>
+	 *  <li> Employee logs in
+	 *  <li> Employee creates a new personal activity
+	 *  <li> Employee is now unavailable in the period of the personal activity for project activities.
+	 *  <li> Employee can not be added to a new project activity
+	 * </ol>
+	 */
+	@Test
+	public void testEmployeePersonalActivityProjectActivity() {
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Create the project
+		projectApp.createNewProject("project 1");
+		
+		// Create start and end week calendar objects
+		Calendar startWeek = new GregorianCalendar();
+		Calendar endWeek = new GregorianCalendar();
+		
+		// Set start and end week
+		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
+		endWeek.set(endWeek.WEEK_OF_YEAR, 3);
+		
+		// Create a new personal activity
+		try {	
+			projectApp.getActiveUser().createPersonalActivity("Vacation", startWeek, endWeek);
+		} catch (AlreadyJoinedWorkActivity e) {
+			assertEquals("You can not have overlab between work activity and personal activity.", e.getMessage());
+			assertEquals("createPersonalActivity", e.getOperation());
+			fail("An exception was thrown");
+		}
+		// Verify that acitivity is added
+		assertEquals(1, projectApp.getActiveUser().getActivities().size());
+		
+		// Create a new activity for the project that
+		projectApp.getProjectById(1).createActivity("activity 1", 15, startWeek, endWeek);
+		
+		// Check that "abcd" is unavailable
+		assertFalse(projectApp.getActiveUser().isAvailable(startWeek, endWeek));
+		
+		// Add "abcd" to activity
+		projectApp.getActiveUser().addToActivity(projectApp.getProjectById(projectApp.serialNumberCounter).getActivityByName("activity 1"));
+		
+		// Check that "abcd" has not been added
+		assertFalse(projectApp.getActiveUser().getActivities().contains(projectApp.getProjectById(projectApp.serialNumberCounter).getActivityByName("activity 1")));
+		
+		// Check that "abcd" has not not joined the activity
+		assertEquals(1, projectApp.getActiveUser().getActivities().size());		
+	}	
+	
+	/** 
+	 * Tests that an available employee added to an activity, cannot be added
+	 * to a personal activity in the same time span.
+	 * <ol>
+	 *  <li> Employee logs in
+	 *  <li> Employee is added to a project activity
+	 *  <li> Employee cannot add personal activity in same time span
+	 * </ol>
+	 */
+	@Test
+	public void testEmployeeProjectActivityPersonalActivity() {
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Create the project
+		projectApp.createNewProject("project 1");
+		
+		// Create start and end week calendar objects
+		Calendar startWeek = new GregorianCalendar();
+		Calendar endWeek = new GregorianCalendar();
+		
+		// Set start and end week
+		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
+		endWeek.set(endWeek.WEEK_OF_YEAR, 3);
+				
+		// Create a new activity for the project that
+		projectApp.getProjectById(1).createActivity("activity 1", 15, startWeek, endWeek);
+		
+		// Check that "abcd" is available
+		assertTrue(projectApp.getActiveUser().isAvailable(startWeek, endWeek));
+		
+		// Add "abcd" to activity
+		projectApp.getActiveUser().addToActivity(projectApp.getProjectById(projectApp.serialNumberCounter).getActivityByName("activity 1"));
+		
+		// Check that "abcd" has been added
+		assertTrue(projectApp.getActiveUser().getActivities().contains(projectApp.getProjectById(projectApp.serialNumberCounter).getActivityByName("activity 1")));
+		
+		// Check that "abcd" has joined the activity
+		assertEquals(1, projectApp.getActiveUser().getActivities().size());		
+		
+		// Create a new personal activity and add
+		try {
+			projectApp.getActiveUser().createPersonalActivity("Vacation", startWeek, endWeek);
+			fail("An exception should have been thrown");
+		} catch (AlreadyJoinedWorkActivity e) {
+			assertEquals("You can not have overlab between work activity and personal activity.", e.getMessage());
+			assertEquals("createPersonalActivity", e.getOperation());
+		}
+		// Verify that activity is not added
+		assertEquals(1, projectApp.getActiveUser().getActivities().size());		
+	}		
 
+	
+	/** 
+	 * Tests that an employee can successfully add himself to multiple personal activities in the same period
+	 * <ol>
+	 *  <li> Employee logs in
+	 *  <li> Employee creates a new personal activity
+	 *  <li> Employee creates another personal activity in the same time span
+	 * </ol>
+	 */
+	@Test
+	public void testEmployeeMultiplePersonalActivity() {
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Create start and end week calendar objects
+		Calendar startWeek = new GregorianCalendar();
+		Calendar endWeek = new GregorianCalendar();
+		
+		// Set start and end week
+		startWeek.set(startWeek.WEEK_OF_YEAR, 1);
+		endWeek.set(endWeek.WEEK_OF_YEAR, 3);
+		
+		// Create a new personal activity
+		try {
+			projectApp.getActiveUser().createPersonalActivity("Vacation", startWeek, endWeek);
+		} catch (AlreadyJoinedWorkActivity e) {
+			assertEquals("You can not have overlab between work activity and personal activity.", e.getMessage());
+			assertEquals("createPersonalActivity", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Verify that acitivity is added
+		assertEquals(1, projectApp.getActiveUser().getActivities().size());	
+		
+		// Create a new personal activity
+		try {
+			projectApp.getActiveUser().createPersonalActivity("Sick Time", startWeek, endWeek);
+		} catch (AlreadyJoinedWorkActivity e) {
+			assertEquals("You can not have overlab between work activity and personal activity.", e.getMessage());
+			assertEquals("createPersonalActivity", e.getOperation());
+			fail("An exception was thrown");
+		}		
+		
+		// Verify that acitivity is added
+		assertEquals(2, projectApp.getActiveUser().getActivities().size());			
+	}	
 }

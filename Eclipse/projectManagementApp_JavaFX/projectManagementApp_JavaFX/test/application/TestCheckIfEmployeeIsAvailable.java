@@ -369,7 +369,13 @@ public class TestCheckIfEmployeeIsAvailable extends SampleDataSetup2 {
 		startWeek.set(startWeek.WEEK_OF_YEAR, 2);
 		endWeek.set(endWeek.WEEK_OF_YEAR, 6);
 		
-		activeEmployee.createPersonalActivity("Holiday in Spain", startWeek, endWeek);
+		try {
+			activeEmployee.createPersonalActivity("Holiday in Spain", startWeek, endWeek);
+		} catch (AlreadyJoinedWorkActivity e) {
+			assertEquals("You can not have overlab between work activity and personal activity.", e.getMessage());
+			assertEquals("createPersonalActivity", e.getOperation());
+			fail("An exception was thrown");
+		}
 		
 		projectApp.logout();
 		

@@ -15,4 +15,7 @@
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
 <fullyQualifiedTypeName name="javafx.geometry.Pos"/>
 <fullyQualifiedTypeName name="application.ProjectAppNavigator"/>
+<fullyQualifiedTypeName name="javafx.scene.control.ChoiceBox"/>
+<fullyQualifiedTypeName name="javax.swing.event.ChangeListener"/>
+<fullyQualifiedTypeName name="javafx.beans.value.ObservableValue"/>
 </qualifiedTypeNameHistroy>

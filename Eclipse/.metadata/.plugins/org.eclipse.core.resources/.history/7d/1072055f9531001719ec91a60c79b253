@@ -1,0 +1,72 @@
+package application;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.junit.Test;
+
+/**
+ * This class contains tests, testing the functionality of adding projects to the system.
+ * @author group 9
+ *
+ */
+public class TestLog extends SampleDataSetup2 {
+	/** 
+	 * Tests that...
+	 * <ol>
+	 *  <li> 
+	 * </ol>
+	 */
+	@Test
+	public void testSuccesfullyLogTimeForActivity() { 
+
+		try {
+			projectApp.login("abcd");
+		} catch (NoSuchUserException e) {
+			assertEquals("No user with initials \"abcd\" exist.", e
+					.getMessage());
+			assertEquals("Login", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		Activity activity = projectApp.getProjectById(1).getActivityByName("activity 1 in project 1"); // has budgeted time = 15
+		
+		// Set the date:
+		Calendar currentDate = new GregorianCalendar();
+		currentDate.set(currentDate.WEEK_OF_YEAR, 1);
+		
+		// From SampleDataSetup2.java we see that "abcd" has joined 'activity 1 in project 1', so we log working hours for that activity
+		// First check that working time for the activity has not been logged for today by "abcd"
+		assertTrue(projectApp.getActiveUser().unloggedActivities(currentDate).contains(projectApp.getProjectById(1).getActivityByName("activity 1 in project 1")));
+		assertEquals(0, projectApp.getActiveUser().getLogByActivity(activity).getTimeSpent(), 0);
+		
+		// "abcd" logs todays working time (7.5) for the activity wich have a budgeted time = 15 and spans week 1 to 3 (2017)
+		try {
+			projectApp.getActiveUser().logActivityTime(activity, 7.5, currentDate);
+		} catch (InvalidWorkingTimeException e) {
+			assertEquals("Input has to be a possitive double type number and user has to join the activity before logging.", e.getMessage());
+			assertEquals("logActivityTime", e.getOperation());
+			fail("An exception was thrown");
+		}
+		
+		// Check that the activity is no longer listed as unlogged
+		assertFalse(projectApp.getActiveUser().unloggedActivities(currentDate).contains(projectApp.getProjectById(1).getActivityByName("activity 1 in project 1")));
+		assertEquals(7.5, projectApp.getActiveUser().getLogByActivity(activity).getTimeSpent(), 0);
+		
+		// Set the date:
+		Calendar newCurrentDate = new GregorianCalendar();
+		newCurrentDate.set(newCurrentDate.WEEK_OF_YEAR, 2);
+		
+		// Check that the activity is now listed as unlogged again
+		assertTrue(projectApp.getActiveUser().unloggedActivities(newCurrentDate).contains(projectApp.getProjectById(1).getActivityByName("activity 1 in project 1")));
+		
+	}
+
+}

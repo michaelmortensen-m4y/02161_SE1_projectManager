@@ -1,0 +1,167 @@
+package application;
+
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+
+public class ListPersonalActivitiesMenuController implements Initializable {
+	
+	public StringBuilder myPersonalActivitiesTextAreaContent = new StringBuilder("");
+	public List<String> activityNames = new ArrayList<String>();
+	public List<Calendar> startDates = new ArrayList<Calendar>();
+	public List<Calendar> endDates = new ArrayList<Calendar>();
+
+	@FXML
+    private TextField activityField;
+    
+    @FXML
+    private TextField startDateField;
+    
+    @FXML
+    private TextField endDateField;
+    
+    @FXML
+	public TextArea myPersonalActivitiesTextArea;
+
+    @FXML
+    void cancelMouseClicked(MouseEvent event) {
+    	ProjectAppNavigator.loadWindow("MainMenu.fxml");
+    }
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+    	for (Activity act : ProjectAppNavigator.projectApp.getActiveUser().getActivities()) {
+    		if (act.isPersonal()) {
+    			String startWeekString = "" + act.getStartWeek().get(Calendar.WEEK_OF_YEAR) + " " + act.getStartWeek().get(Calendar.YEAR);
+            	String endWeekString = "" + act.getEndWeek().get(Calendar.WEEK_OF_YEAR) + " " + act.getEndWeek().get(Calendar.YEAR);
+            	myPersonalActivitiesTextAreaContent.append("- " + act.getName() + " | " + startWeekString + " | " + endWeekString + "\n");
+    		}	
+        }
+    	myPersonalActivitiesTextArea.setText(myPersonalActivitiesTextAreaContent.toString());
+    	myPersonalActivitiesTextArea.setScrollTop(Double.MAX_VALUE);
+    }
+    
+    @FXML
+    void addPersonalActivityMouseClicked(MouseEvent event) {
+    	if (activityField.getText().trim().isEmpty()) {
+    		ProjectAppNavigator.appendToOutputTextArea("Invalid input string for activity name. Has to contain at least 1 char.");
+			return;
+    	}
+    	String activityName = activityField.getText().trim();
+    	Calendar startDate = Calendar.getInstance();
+    	Calendar endDate = Calendar.getInstance();
+    	SimpleDateFormat sdfStart = new SimpleDateFormat("w yyyy", Locale.ENGLISH);
+    	SimpleDateFormat sdfEnd = new SimpleDateFormat("w yyyy", Locale.ENGLISH);
+    	Date dateStart;
+    	Date dateEnd;
+		try {
+			dateStart = sdfStart.parse(startDateField.getText().trim());
+		} catch (ParseException e) {
+			ProjectAppNavigator.appendToOutputTextArea("Wrong start date input format. Use 'w yyyy' ex. '21 2017' meaning week 21 in year 2017.");
+			return;
+		}
+		startDate = sdfStart.getCalendar();
+		try {
+			dateEnd = sdfEnd.parse(endDateField.getText().trim());
+		} catch (ParseException e) {
+			ProjectAppNavigator.appendToOutputTextArea("Wrong end date input format. Use 'w yyyy' ex. '21 2017' meaning week 21 in year 2017.");
+			return;
+		}
+		endDate = sdfEnd.getCalendar();
+		
+		activityNames.add(activityName);
+    	startDates.add(startDate);
+    	endDates.add(endDate);
+    	
+    	myPersonalActivitiesTextAreaContent.append("- " + activityField.getText().trim() + " | " + startDateField.getText().trim() + " | " + endDateField.getText().trim() + "\n");
+    	myPersonalActivitiesTextArea.setText(myPersonalActivitiesTextAreaContent.toString());
+    	myPersonalActivitiesTextArea.setScrollTop(Double.MAX_VALUE);
+    }
+    
+    @FXML
+    void removePersonalActivityMouseClicked(MouseEvent event) {
+    	if (activityField.getText().trim().isEmpty()) {
+    		ProjectAppNavigator.appendToOutputTextArea("No such activity has been added to the activity list.");
+			return;
+    	}
+    	String activityName = activityField.getText().trim();
+    	Calendar startDate = Calendar.getInstance();
+    	Calendar endDate = Calendar.getInstance();
+    	SimpleDateFormat sdfStart = new SimpleDateFormat("w yyyy", Locale.ENGLISH);
+    	SimpleDateFormat sdfEnd = new SimpleDateFormat("w yyyy", Locale.ENGLISH);
+    	Date dateStart;
+    	Date dateEnd;
+		try {
+			dateStart = sdfStart.parse(startDateField.getText().trim());
+		} catch (ParseException e) {
+			ProjectAppNavigator.appendToOutputTextArea("No such activity has been added to the activity list.");
+			return;
+		}
+		startDate = sdfStart.getCalendar();
+		try {
+			dateEnd = sdfEnd.parse(endDateField.getText().trim());
+		} catch (ParseException e) {
+			ProjectAppNavigator.appendToOutputTextArea("No such activity has been added to the activity list.");
+			return;
+		}
+		endDate = sdfEnd.getCalendar();
+		
+		for (Activity act : ProjectAppNavigator.projectApp.getActiveUser().getActivities()) {
+			if (act.getName().equals(activityName) && act.getStartWeek().equals(startDate) && act.getEndWeek().equals(endDate) && act.isPersonal()) {
+				ProjectAppNavigator.projectApp.getActiveUser().removeFromActivity(act);
+	        	String startWeekString = "" + act.getStartWeek().get(Calendar.WEEK_OF_YEAR) + " " + act.getStartWeek().get(Calendar.YEAR);
+	        	String endWeekString = "" + act.getEndWeek().get(Calendar.WEEK_OF_YEAR) + " " + act.getEndWeek().get(Calendar.YEAR);
+	        	String activityString = "- " + act.getName() + " | " + startWeekString + " | " + endWeekString + "\n";
+	        	int i = myPersonalActivitiesTextAreaContent.indexOf(activityString);
+	        	if (i != -1) {
+	        		myPersonalActivitiesTextAreaContent.delete(i, i+activityString.length());
+	        	}
+	        	myPersonalActivitiesTextArea.setText(myPersonalActivitiesTextAreaContent.toString());
+	        	myPersonalActivitiesTextArea.setScrollTop(Double.MAX_VALUE);
+	        	ProjectAppNavigator.appendToOutputTextArea("Personal activity '" + act.getName() + "' removed.");
+	        	return;
+			}
+		}
+    	
+    	if ((activityNames.contains(activityName) && startDates.contains(startDate) && endDates.contains(endDate)) &&
+    		(activityNames.indexOf(activityName) == startDates.indexOf(startDate)) &&
+    		(activityNames.indexOf(activityName) == endDates.indexOf(endDate)))
+    	{	
+    		activityNames.remove(activityName);
+	    	startDates.remove(startDate);
+	    	endDates.remove(endDate);
+    	} else {
+	    	ProjectAppNavigator.appendToOutputTextArea("No such activity has been added to the activity list.");
+    		return;
+    	}
+    	
+    	String activityString = "- " + activityField.getText().trim() + " | " + startDateField.getText().trim() + " | " + endDateField.getText().trim() + "\n";
+    	int i = myPersonalActivitiesTextAreaContent.indexOf(activityString);
+    	if (i != -1) {
+    		myPersonalActivitiesTextAreaContent.delete(i, i+activityString.length());
+    	}
+    	myPersonalActivitiesTextArea.setText(myPersonalActivitiesTextAreaContent.toString());
+    	myPersonalActivitiesTextArea.setScrollTop(Double.MAX_VALUE);
+    }
+    
+    @FXML
+    void okMouseClicked(MouseEvent event) {
+    	for (int i = 0; i < activityNames.size(); i++) {
+    		ProjectAppNavigator.projectApp.getActiveUser().createPersonalActivity(activityNames.get(i), startDates.get(i), endDates.get(i));
+			ProjectAppNavigator.appendToOutputTextArea("Added new personal activity '"+ activityNames.get(i) +"' for employee '" + ProjectAppNavigator.projectApp.getActiveUser().getInitials() + "'.");
+		}
+    	ProjectAppNavigator.loadWindow("MainMenu.fxml");
+    }
+}
